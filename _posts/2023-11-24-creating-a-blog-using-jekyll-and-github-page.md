@@ -1,6 +1,6 @@
 ---
 title: "Creating a Blog Using Jekyll and Github Pages"
-date: 2023-11-24 00:00:00 +0800
+date: 2023-11-24 00:00
 categories: ["Tutorials", "Blog"]
 tags: []
 img_path: /assets/img/2023-11-24-creating-a-blog-using-jekyll-and-github-pages
