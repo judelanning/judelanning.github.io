@@ -32,7 +32,7 @@ Once booted, we see the Proxmox install selection screen. I chose the graphical 
 On the next screen, I was presented with the EULA for Proxmox. 
 ![server2](setup2.jpg){: .normal }  
 
-After agreeing to the EULA, I was give the option to chose my install drive. I chose /dev/sdb as this is the 2tb SSD.
+After agreeing to the EULA, I was give the option to chose my install drive. I chose /dev/sdb as this is the 2tb SSD.  
 ![server3](setup3.jpg){: .normal }  
 
 Next up, I chose the country and time zone. For these, I went with USA and UTC as the time zone.
