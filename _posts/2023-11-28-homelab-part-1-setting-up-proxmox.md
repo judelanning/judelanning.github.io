@@ -18,37 +18,37 @@ The Optiplex I ordered only came with a 128gb SSD and 8gb of RAM, definitely not
 I also plan to virtualize pfSense to act as my router & firewall for the network. You can do this without a dedicated network card, but I decided to order a dedicated 1gb dual-port Intel NIC that will be passed-through to pfSense to avoid any problems that may arise from using a single port.
 
 With everything but the HHD in the system, this is what it looks like:
-![server1](server1.jpg){: .normal }  
+![server1](server1.png){: .normal }  
 
 With the HHD in place, this is what the server looks like all put together (without the side panel of course).
-![server1](server2.jpg){: .normal }  
+![server1](server2.png){: .normal }  
 
 ## Installing Proxmox
 To install Proxmox to the server, I first flashed the ISO file provided by Proxmox onto a USB using Balena Etcher. From there, I booted up the server with the USB plugged in and selected it as the boot drive.
 
 Once booted, we see the Proxmox install selection screen. I chose the graphical install.
-![server1](setup1.jpg){: .normal }  
+![server1](setup1.png){: .normal }  
 
 On the next screen, I was presented with the EULA for Proxmox. 
-![server2](setup2.jpg){: .normal }  
+![server2](setup2.png){: .normal }  
 
 After agreeing to the EULA, I was give the option to chose my install drive. I chose /dev/sdb as this is the 2tb SSD.  
-![server3](setup3.jpg){: .normal }  
+![server3](setup3.png){: .normal }  
 
 Next up, I chose the country and time zone. For these, I went with USA and UTC as the time zone.
-![server4](setup4.jpg){: .normal }  
+![server4](setup4.png){: .normal }  
 
 On the next screen, I entered the password that I wanted to be my root password for Proxmox. This will be used to access Proxmox via the web UI. I also entered the email that will be alerted when there are critical notifications for Proxmox.
-![server5](setup5.jpg){: .normal }  
+![server5](setup5.png){: .normal }  
 
 Next up, I was prompted for the management interface, hostname, and network information for Proxmox. Since we'll be using the PCIe NIC for pfSense, I'll choose the motherbaord port for the management interface. For the hostname, I went with rainier.local. Lastly, for the network information I added an IP address that was in range of my current router's range, the current router's IP, and the DNS server's IP.
-![server6](setup6.jpg){: .normal }  
+![server6](setup6.png){: .normal }  
 
 After that, we see a review of the changes I made so far. Everything looked good, so I proceeded with the install.
-![server7](setup7.jpg){: .normal }  
+![server7](setup7.png){: .normal }  
 
 After the server restarted and Proxmox was installed, I was presented with a CLI giving the IP and port to access the Proxmox web UI at. From this point on we can manage Proxmox via the web UI and no longer need a monitor.
-![server8](setup8.jpg){: .normal }  
+![server8](setup8.png){: .normal }  
 
 On my PC, I headed to the IP and port where Proxmox is hosted. At first, I was met with a warning because Proxmox uses a self-signed certificate. Because I trust it, I proceeded past the warning.
 ![warning](1.png){: .normal }  
