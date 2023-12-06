@@ -2,10 +2,10 @@
 title: "Homelab Part 1 - Setting Up Proxmox"
 date: 2023-11-30 00:00
 categories: ["Homelab", "Proxmox"]
-tags: ["Proxmox"]
+tags: ["Proxmox", "Virtualization"]
 img_path: /assets/img/2023-11-28-homelab-part-1-setting-up-proxmox
 ---
-## Overview
+## Introduction
 In this post we will walk through the process I took to setup Proxmox, a hypervisor that allows for the creation of virtual hosts, on a used Dell Optiplex 7050 SFF. This Proxmox instance will be the center of my homelab and host my servers for networking, security tools, red-team labbing, and much more. I chose a used Optiplex over traditional rack server because it was cheaper while still working for what I intend to do within my homelab. If my needs eventually exceed what the Optiplex can offer, I can always create another Proxmox node and cluster them together so the Optiplex can still be used. 
 
 ## The Hardware
