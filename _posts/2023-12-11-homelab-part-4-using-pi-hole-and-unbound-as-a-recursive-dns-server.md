@@ -3,7 +3,7 @@ title: "Homelab Part 4 - Using Pi-hole & Unbound as a Recursive DNS Server"
 date: 2023-12-11 00:00
 categories: ["Homelab", "Networking"]
 tags: ["VLANs", "Security", "DNS", "Privacy"]
-img_path: /assets/img/2023-12-11-homelab-part-4-using-pi-hole-as-a-recursive-dns-server
+img_path: /assets/img/2023-12-11-homelab-part-4-using-pi-hole-and-unbound-as-a-recursive-dns-server
 ---
 ## Introduction
 In this post I will walk through setting up Pi-hole & Unbound in my home network. These two services will work together to act as the primary DNS server for my home network. Once complete, the lifecycle of a DNS request will follow this chart:
@@ -12,7 +12,7 @@ In this post I will walk through setting up Pi-hole & Unbound in my home network
 Pi-hole will be the first point of contact for any DNS requests within the network. Pi-hole serves as a DNS filtering system where it has a list of domains that are used for either advertisements or tracking purposes. When it receives a DNS request that matches one of these domains, it will return 0.0.0.0 to the requester and that content will not be loaded. If the DNS request doesn't match any domains on the deny list, by default, the request is forwarded to a 3rd party DNS server (Google, Cloudflare, etc) and the 3rd party will resolve the domain. This works great if you are only concerned about eliminating advertisements & tracking from the sites and apps your endpoints are visiting. However, if you'd like you take enhance the privacy of your DNS requests, you might use something like Unbound in addition to Pi-hole.
 
 Unbound performs the same role as the 3rd party DNS server in the example above, but it is open-source and self-hosted. This means that DNS requests can still be resolved without needing to be sent to a 3rd party middleman that likely tracks and builds an activity profile around those requests. Here is an example of how a DNS request for a domain that is not on the deny lists or cached is handled:
-![diagram1](DNS.png){: .normal }  
+![diagram1](dns.png){: .normal }  
 
 Once a domain is resolved for the first time following the process above, the results are stored in Pi-hole and Pi-hole will return the IP address on the next request instead of having to go through Unbound. Because of this, initial requests to a domain will take a bit longer, but following requests will be much faster as they are only resolved locally.
 
