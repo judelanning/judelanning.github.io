@@ -1,7 +1,7 @@
 ---
 title: "Homelab Part 5 - Intrusion Detection with Suricata"
 date: 2023-12-19 00:00
-categories: ["Homelab", "Networking"]
+categories: ["Homelab", "Security"]
 tags: ["VLANs", "Security", "IDS"]
 img_path: /assets/img/2023-12-19-homelab-part-5-intrusion-detection-with-suricata
 ---
