@@ -123,6 +123,6 @@ Now if I head back to Suricata->Alerts->Interface, I can see the alert that was 
 This is what a true positive would look like if Suricata were to alert on one.
 
 ## Closing Thoughts
-Now that Suricata is setup and running on all VLAN interfaces, as mentioned before, I will monitor the alerts over the next week or two and be sure to tune out any false positive alerts so that when I do flip Suricata over to block mode, my legitimate traffic isn't blocked. I also plan on shipping the Suricata logs to a SIEM where I can search, parse, and alert on them much easier than in the pfSense web interface. For now however, Suricata is running and alerting on any potentially malicious traffic within my network.
+Now that Suricata is setup and running on all VLAN interfaces I will monitor the alerts over the next week or two and be sure to tune out any false positive alerts so that when I do flip Suricata over to block mode, my legitimate traffic isn't blocked. I also plan on shipping the Suricata logs to a SIEM where I can search, parse, and alert on them much easier than in the pfSense web interface. For now however, Suricata is running and alerting on any potentially malicious traffic within my network.
 
-Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!  
