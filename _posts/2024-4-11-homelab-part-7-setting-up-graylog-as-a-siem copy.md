@@ -172,7 +172,7 @@ After making these changes and launching the input, I can now see the input list
 There is currently no throughput as pfSense is not sending logs yet. Let's change that.
 
 ## Sending pfSense Logs
-To send pfSense logs over to Graynoise, I'll head over to pfSense->Status->System Logs->Settings. Here I won't change any settings except for enabling "Remote Logging". On the "Remote Logging" menu, I will enter the Graylog server IP address along with the pfSense input listening port. I'll also choose what logs will be sent over, and I will choose everything for my use case.  
+To send pfSense logs over to Graylog, I'll head over to pfSense->Status->System Logs->Settings. Here I won't change any settings except for enabling "Remote Logging". On the "Remote Logging" menu, I will enter the Graylog server IP address along with the pfSense input listening port. I'll also choose what logs will be sent over, and I will choose everything for my use case.  
 ![diagram1](9.png){: .normal } 
 
 After saving these changes and heading back to Graylog, I can now see that logs are flowing into Graylog "Network IO" tracker is counting up received data.  
