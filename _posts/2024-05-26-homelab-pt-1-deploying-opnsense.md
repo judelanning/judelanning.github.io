@@ -118,7 +118,7 @@ After connecting to this network with a wireless device, it can indeed reach the
 ![](23.JPEG){: .normal }  
 
 ## Closing Thoughts
-Now with OPNsense, a switch, and an access point configured I now have a simple, flat network up and running. Although this setup is as barebones as it gets, I do plan to make it much more advanced and secure in future posts by implementing VLANs for segregation, IDS/IPS monitoring, and many more controls to ensure a comprehensive, layered defense. As it stands, my network matches the following layout:  
+Now with OPNsense, a switch, and an access point configured I now have a simple, flat network up and running. Although this setup is as barebones as it gets, I do plan to make it much more advanced and secure in future posts by implementing VLANs for segmentation, IDS/IPS monitoring, and many more controls to ensure a comprehensive, layered defense. As it stands, my network matches the following layout:  
 ![](23.png){: .normal }  
 
 Thanks for taking the time to read this post - feel free to reach out via [LinkedIn](https://www.linkedin.com/in/judelanning/) if you have any questions for me!
