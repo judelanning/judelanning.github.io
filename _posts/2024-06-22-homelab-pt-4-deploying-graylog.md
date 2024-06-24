@@ -1,9 +1,9 @@
 ---
-title: "Homelab Pt 4 - Deploying Graylog SIEM"
+title: "Homelab Pt 4 - Deploying Graylog"
 date: 2024-6-22 00:00
 categories: ["Homelab", "Security"]
 
-img_path: /assets/img/2024-06-22-homelab-pt-4-deploying-graylog-siem
+img_path: /assets/img/2024-06-22-homelab-pt-4-deploying-graylog
 image:
     path: thumbnail.JPEG
     alt: Middle Fork Snoqualmie Trail, Washington
