@@ -1,9 +1,9 @@
 ---
 title: "Homelab Pt 8 - Incident Response with DFIR IRIS"
-date: 2024-7-03 00:00
+date: 2024-7-07 00:00
 categories: ["Homelab", "Security"]
 
-img_path: /assets/img/2024-07-03-homelab-pt-8-incident-response-with-DFIR-IRIS
+img_path: /assets/img/2024-07-07-homelab-pt-8-incident-response-with-DFIR-IRIS
 image:
     path: thumbnail.JPEG
     alt: Mt. Rainier National Park, Washington
