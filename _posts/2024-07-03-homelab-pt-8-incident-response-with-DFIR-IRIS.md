@@ -74,4 +74,29 @@ After proceeding past the warning, I can now see the platform's web interface.
 Once I authenticate with the password I set in the .env file earlier, I am brought to the dashboard and can now start using the platform!  
 ![diagram1](3.png){: .normal }  
 
+Now let's explore the platform a bit to see how I might use it when working an incident.  
+
 ## Exploring DFIR IRIS
+### Cases
+DFIR IRIS uses cases to track incidents. I plan on having most of my cases be opened programmatically through SOAR workflows, but they can also be manually opened if needed. When manually creating a case, you can select various field to set the scope of the case such as template, classification, description, etc. You can think of this platform like Jira but tailor-made for security incidents, and naturally much less bloated than a platform like Jira. 
+![diagram1](4.png){: .normal }  
+
+Each case can have various data points added to enrich the case such as IOCs, notes, assets involved, evidence, and much more. These all help to paint a clear picture using all the information relating to an incident. These can all be added inside of the individual cases directly.
+![diagram1](5.png){: .normal }  
+
+Aside from supplementary data, cases can also have tasks assigned to them so the analyst working the case know exactly what steps need to be taken at a minimum, a timeline for actions taken on the case, and lots of other options.
+
+
+### Customers
+DFIR IRIS also has support for adding various customers into the platform. This is useful if you're providing IR services to various customers/user groups and have various SLAs, points of contact, etc. for each of them. The idea is for every case, you choose what customer it applies to and the analyst can then use view that information is needed. This tagging of cases is also extremely helpful for reporting on trends and statistics for individual customers if needed. Below is a screenshot of a simple "customer" I created for my network.  
+![diagram1](6.png){: .normal }  
+
+
+
+### Much, Much More!
+What I've covered here is a fraction of a scratch on the surface of DFIR IRIS's capabilities. The team behind the project has done a truly great job with the platform and I can't wait to see how it grows going forward. If you're interested in checking out the project, you can find it [here](https://dfir-iris.org/).
+
+## Closing Thoughts
+With DFIR IRIS now deployed, I can start to build out SOAR workflows that will automatically gather events, enrich them, and then open cases within the platform with all the relevant information ready for analyst triage. In my next post I plan on deploying [n8n](https://github.com/n8n-io/n8n), an open-source automation platform, to serve as my SOAR and build out an end-to-end workflow for the Suricata IDS detections I set up in my [previous post](/posts/homelab-pt-7-detecting-known-threats-with-suricata/). 
+
+Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
