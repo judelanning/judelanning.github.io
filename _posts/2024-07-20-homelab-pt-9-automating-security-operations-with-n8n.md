@@ -69,6 +69,44 @@ From there an analyst is able to, hopefully, triage the finding much faster than
 With the plan now set, I'll jump into building out this workflow.
 
 ### Triggering Workflow
+Since I've already got my Suricata logs being shipped  to and parsed by Graylog (covered in [this](/posts/homelab-pt-7-detecting-known-threats-with-suricata) post), getting these findings to kick off an n8n workflow is relatively simple. To start, I'll create a new workflow within n8n and select the event that will trigger the workflow. While there are app integrations under the "On app event" section, Graylog doesn't have an integration. Instead, I'll stick with the basic webhook call which will require a bit more work than an integration, but that's the fun of it!  
+![diagram1](3.png){: .normal }  
+
+After selecting webhook call as the trigger, I am now prompted to customize the node that will be listening for the trigger. For this workflow, Graylog will be the resource sending POST requests to the node with the relevant information. Here I'll name the node, select POST as the type, and ensure that the workflow will respond to the POST request immediately. To ensure that only Graylog can make POST requests to this node I've also added IP filtering to only allow requests from the Graylog server IP along with creating a credential that Graylog will use for authentication. These credentials will need to be configured on Graylog as well so it knows what credentials to send to n8n.  
+![diagram1](4.png){: .normal }  
+
+I am also provided with the path where Graylog will need to POST to such that n8n can receive the data. For now I'll stick the with auto-generated paths, but in the future I may want to switch over to human readable paths to make things simpler. 
+
+Before building out the rest of the workflow, I'll get Graylog configured to send the relevant information to this node when it ingests an ET Open CNC finding. After saving and enabling the workflow, I'll head over to Graylog->Alerts->Notifications. Notifications are used by Alerts within Graylog to notify something or someone about a pattern it observed. In this case, Graylog will use this notification to kick off the n8n workflow.
+
+On this notification I'll give it a name and quick description, enter the path it should POST to, and supply the credentials it will send to n8n to verify itself.  
+![diagram1](5.png){: .normal }  
+
+After creating the notification, I can perform a test notification with the test button. After testing the notification, I am given a green message saying it was successful, meaning Graylog must have received a 20X response from n8n. Heading over to n8n, I can indeed see that test data was POSTed to the trigger node!
+![diagram1](6.png){: .normal }  
+
+With the notification now configured and working, I now just need to define what will trigger the notification within Graylog. Heading to Graylog->Alerts->Event Definitions I'll create a new event definition that monitors for incoming ET Open CNC findings. This definition will use a Graylog search ran every 1 minute looking at the past 1 minute to identify the alerts.  
+![diagram1](7.png){: .normal }  
+
+On the fields section of this event definition, I'll also add the various message fields I want to POST to n8n. With the nature of these findings, I'll send the Suricata information and the networking information to n8n. Since the Graylog message will serve as the source, I'll use the following format the grab the fields: $source.field_name.
+![diagram1](8.png){: .normal }  
+
+On the notifications section, I'll select the notification I just created and tested as well.  
+![diagram1](9.png){: .normal }  
+
+With this, Graylog should be fully configured to send any findings from the ET Open CNC detections. To manually test this without actually infecting one of my endpoints, I'll simply ping an IP that's on the ET Open CNC rule set to mimic traffic of a compromised device to trigger the detection. After doing this, I can see the traffic being detected in Suricata.  
+![diagram1](10.png){: .normal }  
+
+Over in Graylog, I can also see the finding being sent over following the expected pattern.
+![diagram1](11.png){: .normal }  
+
+Checking the alerts section in Graylog, I can also see that the alert has fired and n8n should've been sent the information from this finding.  
+![diagram1](12.png){: .normal }  
+
+Finally, heading over to n8n I can see the information was POSTed to the trigger node.
+![diagram1](13.png){: .normal }  
+
+The process from detection firing to sending the data to n8n is now in place! From here I'll work on building out the rest of the workflow to enrich the findings, open cases within DFIR IRIS, and page an analyst to respond to the findings.
 
 ### Enriching Findings
 
