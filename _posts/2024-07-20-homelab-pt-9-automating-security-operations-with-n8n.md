@@ -109,6 +109,12 @@ Finally, heading over to n8n I can see the information was POSTed to the trigger
 The process from detection firing to sending the data to n8n is now in place! From here I'll work on building out the rest of the workflow to enrich the findings, open cases within DFIR IRIS, and page an analyst to respond to the findings.
 
 ### Enriching Findings
+To enrich these Suricata findings, I'll be using VirusTotal and GrayNoise as my threat intelligence sources. This type of enrichment is usually manually done by analysts when they want to investigate a resource. This information can help provide context to an investigation by shining light on the resource's owner, configurations, history, etc. Think of it like auditing someone for fraud. The investigating body will collect tax records, bank account information, etc in order to gain as much information as possible. Not every piece of data will be useful but it is better to have it than not.
+
+I'll start this off with adding a node to the workflow. Since n8n has an integration with VirusTotal, I'll choose VirusTotal HTTP Request.  
+![diagram1](14.png){: .normal }  
+
+
 
 ### Opening Incident Cases
 
