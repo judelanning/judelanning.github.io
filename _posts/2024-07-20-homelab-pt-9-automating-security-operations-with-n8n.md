@@ -56,15 +56,15 @@ The main three points of focus for this new workflow are as follows:
 * Automate opening of case within IR platform
 * Automate paging of analyst
 
-To enrich the findings, I'll be integrating with VirusTotal and GrayNoise for threat intelligence. I'm using DFIR IRIS as my IR platform, so I'll have hooks into it to manage cases. I'll also integrate Slack to serve as my paging mechanism for the on-duty analyst (Me in this scenario).
+To enrich the findings, I'll be integrating with VirusTotal and Open Threat Exchange (OTX) for threat intelligence. I'm using DFIR IRIS as my IR platform, so I'll have hooks into it to manage cases. I'll also integrate Slack to serve as my paging mechanism for the on-duty analyst (Me in this scenario).
 
 Once complete, the workflow will generally consist of the 4 phases:
 1. Graylog (SIEM) detects ET Open CNC finding in the Suricata logs it's ingesting and sends data to n8n to kick off workflow.
-2. n8n parses the information provided by Graylog and reaches out to VirusTotal and GrayNoise for threat intelligence on the C2 server detected.
+2. n8n parses the information provided by Graylog and reaches out to VirusTotal and OTX for threat intelligence on the C2 server detected.
 3. n8n opens a case within DFIR IRIS with the original finding and supplemental threat intelligence data.
 4. Page analyst via Slack with information on finding
 
-From there an analyst is able to, hopefully, triage the finding much faster than they would be able to if they were going out to VirusTotal, GrayNoise, etc. and manually gathering intelligence to aid their investigation. If I were working with SLAs in my environment, the automatic paging of the on-duty analyst also helps to ensure they are met.
+From there an analyst is able to, hopefully, triage the finding much faster than they would be able to if they were going out to VirusTotal, OTX, etc. and manually gathering intelligence to aid their investigation. If I were working with SLAs in my environment, the automatic paging of the on-duty analyst also helps to ensure they are met.
 
 With the plan now set, I'll jump into building out this workflow.
 
@@ -109,10 +109,34 @@ Finally, heading over to n8n I can see the information was POSTed to the trigger
 The process from detection firing to sending the data to n8n is now in place! From here I'll work on building out the rest of the workflow to enrich the findings, open cases within DFIR IRIS, and page an analyst to respond to the findings.
 
 ### Enriching Findings
-To enrich these Suricata findings, I'll be using VirusTotal and GrayNoise as my threat intelligence sources. This type of enrichment is usually manually done by analysts when they want to investigate a resource. This information can help provide context to an investigation by shining light on the resource's owner, configurations, history, etc. Think of it like auditing someone for fraud. The investigating body will collect tax records, bank account information, etc in order to gain as much information as possible. Not every piece of data will be useful but it is better to have it than not.
+To enrich these Suricata findings, I'll be using VirusTotal and Open Threat Exchange as my threat intelligence sources. This type of enrichment is usually manually done by analysts when they want to investigate a resource. This information can help provide context to an investigation by shedding light on the resource's owner, configurations, history, etc. Think of it like auditing someone for fraud. The investigating body will collect tax records, bank account information, etc in order to gain as much information as possible. Not every piece of data will be useful but it is better to have it than not.
 
+#### VirusTotal Integration
 I'll start this off with adding a node to the workflow. Since n8n has an integration with VirusTotal, I'll choose VirusTotal HTTP Request.  
 ![diagram1](14.png){: .normal }  
+
+Inside that node, I'll click the "test node" button where it will wait to receive data from the previous trigger node. To ensure it is fed data, I'll re-trigger the ET Open CNC alert by pinging one of the C2 servers from its rule list. After doing this, Suricata detects the traffic, sends it to Graylog, and Graylog will send the information to the trigger node in this workflow:  
+![diagram1](15.png){: .normal }  
+
+Now that the VirusTotal node is receiving data from the Suricata findings, I can start building out the VirusTotal integration. Since the only type of detection that will trigger this workflow would be C2 communication, the destination IP is the main point of interest. Because of this, I'll be using the VirusTotal API [endpoint](https://docs.virustotal.com/reference/ip-info) that returns reports on the queried IP address. To do this, inside of the VirusTotal workflow node, I'll choose GET as the HTTP method, set the URL to the API endpoint appended with the destination IP provided by the Suricata finding, and select my VirusTotal API key as the authentication mechanism.  
+![diagram1](16.png){: .normal }  
+
+From there, I'll execute the node to verify I get the expected response from VirusTotal. After executing the node, I do get the full report on the IP address from VirusTotal as expected!
+![diagram1](17.png){: .normal }  
+
+Later on in the workflow I'll build out nodes that process this information and open up a case within my IR platform, DFIR IRIS. Before doing this however, I'll build out the node for Open Threat Exchange integration to ensure all data has been collected before sending it off. 
+
+#### OTX Integration
+To build out the OTX integration, I'll create another node to the workflow that follows the trigger node. Since n8n doesn't have any native integrations for OTX, I'll use the basic HTTP Request node and build the integration manually.  
+![diagram1](18.png){: .normal }  
+
+With the OTX node created I'll add the relevant information, similar to the VirusTotal node, including API endpoint for relevant information, HTTP method, and authentication method.  
+![diagram1](19.png){: .normal }  
+
+With these fields populated, I'll execute the node to ensure I get the expected data from OTX back. After testing, I do indeed get a full overview that OTX has on the IP.  
+![diagram1](20.png){: .normal }  
+
+Now that I've got two nodes created for enriching ET Open CNC findings with intelligence from VirusTotal and Open Threat Exchange, I can now parse the relevant information and use it as supplemental data to be added to cases the n8n workflow opens. From here, I'll finish off the workflow by building out the nodes that will open cases within DFIR IRIS and add the supplemental information to said cases.
 
 
 
