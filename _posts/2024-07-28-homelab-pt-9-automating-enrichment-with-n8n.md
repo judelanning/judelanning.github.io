@@ -1,9 +1,9 @@
 ---
-title: "Homelab Pt 9 - Automating Security Operations with n8n"
-date: 2024-7-20 00:00
+title: "Homelab Pt 9 - Automating Enrichment with n8n"
+date: 2024-7-28 00:00
 categories: ["Homelab", "Security"]
 
-img_path: /assets/img/2024-07-20-homelab-pt-9-automating-security-operations-with-n8n
+img_path: /assets/img/2024-07-28-homelab-pt-9-automating-enrichment-with-n8n
 image:
     path: thumbnail.JPEG
     alt: Summit Lake, Washington
@@ -11,7 +11,7 @@ image:
 ## Introduction
 In this post I'll walk through standing up n8n, an open-source automation platform, that will serve as the SOAR for my environment. n8n will allow me to automatically enrich findings through threat intelligence integrations, manage incidents within my case management platform, update firewalls dynamically, and really any other action that can be automated. While there are specific platform integrations supported by n8n (Jira, CS Falcon, etc.), it also supports regular webhook APIs for any platform that doesn't have an official integration.
 
-Once deployed, I will also create an end-to-end workflow for a subset of the Suricata rules I currently have running on my OPNsense firewall.
+Once deployed, I will also create an end-to-end workflow for a subset of the Suricata rules I currently have running on my OPNsense firewall. This workflow will action a specific set of ET Open CNC detections by enriching the findings with threat intelligence and opening a case within my IR platform.
 
 ## Deploying n8n
 The deployment of n8n is made very simple using containerization. n8n provides a Docker image available at docker.n8n.io/n8nio/n8n. To get n8n stood up using Docker, I'll first create a Docker volume so the n8n container can have an area for persistent storage. To do this, I'll using the following command:
@@ -138,8 +138,77 @@ With these fields populated, I'll execute the node to ensure I get the expected 
 
 Now that I've got two nodes created for enriching ET Open CNC findings with intelligence from VirusTotal and Open Threat Exchange, I can now parse the relevant information and use it as supplemental data to be added to cases the n8n workflow opens. From here, I'll finish off the workflow by building out the nodes that will open cases within DFIR IRIS and add the supplemental information to said cases.
 
-
-
 ### Opening Incident Cases
+To open a case within my IR platform, IRIS, as a part of this workflow I'll create another HTTP request node that follows the trigger node. This node will open a case within IRIS with the information it initially receives from Graylog.  
+![diagram1](22.png){: .normal }  
+
+Following the IRIS API [documentation](https://docs.dfir-iris.org/_static/iris_api_reference_v2.0.2.html), to create a new case I'll need to provide the following parameters:
+* Case SOC ID
+* Case Customer
+* Case Name
+* Case Description
+
+Inside the node, I'll add these items and their respective values as parameters in the POST request.  
+![diagram1](23.png){: .normal }  
+
+I'll also select the HTTP request type, API endpoint, and authentication method to the node as well.  
+![diagram1](24.png){: .normal }  
+
+After executing this node to ensure everything is working properly, I can see that a case has been opened within IRIS and I'm provided with various attributes from that case.  
+![diagram1](25.png){: .normal }  
+
+Heading over to IRIS, I do also see the case present in the platform with the correct information.  
+![diagram1](26.png){: .normal }  
+
+With the ability to open new cases now added to the workflow, all that's left is to add the threat intelligence previously gathered from VirusTotal and Open Threat Exchange to the case for each finding.
+
+### Updating Incident Cases
+I'll be using notes to store the additional information gathered from VirusTotal and OTX within the IRIS cases. Notes are added to individual cases and must be stored within a notes directory. By default cases don't have any directories, so that will be the next step in the workflow.  
+
+#### Creating Notes Directories
+I plan on creating two notes directories: one for VirusTotal intel and one for OTX intel. To do this, I'll create two nodes in the workflow that each follow the node that opens a case within IRIS.  
+![diagram1](27.png){: .normal }  
+
+Both of these nodes will use the create notes directory API endpoint documented [here](https://docs.dfir-iris.org/latest/_static/iris_api_reference_v2.0.4.html#tag/Case-notes/operation/post-case-notes-add-directory). This endpoint is a POST to IRIS that requires the case ID that the directory should be added to along with the name of the directory. Since these nodes follow the node that creates the cases, they'll already have the relevant case ID needed to create the directory and I'll hardcode the directory names as they won't change. Here's an example of the node that will create the VirusTotal directory:  
+![diagram1](28.png){: .normal }  
+
+After executing the node to create a VirusTotal notes directory, I can see that is has successfully executed and returns the directory information along with the original case ID. With this information, I can finally create the workflow nodes that add the data from VirusTotal and OTX to the cases.
+
+#### Creating Notes
+Because the nodes for adding notes will require input data from 2 previous nodes (Threat Intel from VT/OTX & Case ID/Notes Directory ID), I'll create 2 merge nodes that will aggregate the data from the in-scope nodes before sending them off to the node to create notes. With those merge nodes created, the workflow now looks like this:  
+![diagram1](30.png){: .normal }  
+
+All that's left is to create 2 more nodes, one for the VirusTotal data and one for the OTX data, that will create notes within their respective notes directories with the threat intelligence from VT and OTX.  
+![diagram1](31.png){: .normal }  
+
+For these 2 nodes I'll be using the *Add a new note* API endpoint documented [here](https://docs.dfir-iris.org/latest/_static/iris_api_reference_v2.0.4.html#tag/Case-notes/operation/post-case-notes-add). This endpoint requires the following data to be sent in the POST:
+* Case ID
+* Note Title
+* Note Content (Can be sent as markdown)
+* Directory ID
+
+Following the same pattern as the other nodes I'll select the HTTP method, URL endpoint, authentication method, and populate the fields that will makeup the actual note. While the note directory and name will be static, I'll add the following fields in the note content:  
+**VirusTotal**
+* Last analysis date/time
+* Vendor dispositions
+* CIDR of IP
+* Owner of IP
+* IP Geolocation
+* Crowdsourced Context
+* Community Votes
+
+**Open Threat Exchange**
+* Pulse Count
+* Pulse Name(s)
+* Malware Families
+
+With this information now populated, after testing both nodes, I can now see the notes being added to the cases as expected!  
+![diagram1](32.png){: .normal }  
+
+There may be more interesting fields available that I could add to the notes that may be helpful to those triaging the findings, but building those out would be a part of the feedback loop that would occur once these findings are being triaged.  
 
 ## Closing Thoughts
+With the end-to-end workflow now complete, when the ET Open CNC findings are triggered from Suricata running on my firewall the findings will automatically open a case within IRIS, fetch threat intelligence from various sources, and add that intelligence to the respective case. This allows the analyst triaging the finding to have all the information available within the case itself without having to go out to a separate resource.  
+![diagram1](33.png){: .normal }  
+
+Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
