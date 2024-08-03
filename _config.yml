@@ -16,7 +16,7 @@ timezone: America/Los_Angeles
 
 title: Jude Lanning # the main title
 
-tagline:  My cybersecurity blog! # it will display as the sub-title
+tagline:  My infosec blog! # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   My cybersecurity blog!
