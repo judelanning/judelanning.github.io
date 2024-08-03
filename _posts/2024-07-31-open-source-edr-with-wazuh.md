@@ -49,10 +49,10 @@ After authenticating with the credentials I previously configured, I can now see
 
 There are some system-level events already populated just from Wazuh running, but the data that I really want to monitor is the data from my endpoints. This is where agents come into the picture. Wazuh agents are installed on each endpoint you'd like to have Wazuh coverage on, ideally all user endpoints and as much infrastructure as possible, and send various data from that endpoint to the Wazuh manager for analysis and indexing. From there alerts can be generated from findings within the data, threat hunts can be conducted, you can get reports on your fleet's baseline compliance, and so much more.
 
-Of course, none of this data will be present without actually enrolling agents so now I'll work to get some endpoints enrolled.
+Of course, none of this data will be present without any agents so now I'll work to get a few endpoints enrolled.
 
 ### Opening Firewall Rules
-
+Wazuh requires TCP 1514 to enroll agents and TCP 1515 for the continued sending of data from the agent. Because the host Wazuh is running on resides within my security tools VLAN, endpoints outside of that VLAN cannot communicate to it by default. Because of this, I'll need to create a firewall rule for each VLAN where I'll have endpoints monitored by Wazuh that allows 1514-1515 TCP to the security tools VLAN.
 
 ## Enrolling Agents
 
