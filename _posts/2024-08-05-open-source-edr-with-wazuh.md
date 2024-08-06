@@ -1,9 +1,9 @@
 ---
 title: "Homelab Pt 10 - Open-Source EDR with Wazuh"
-date: 2024-7-31 00:00
+date: 2024-08-05 00:00
 categories: ["Homelab", "Security"]
 
-img_path: /assets/img/2024-08-01-open-source-edr-with-wazuh
+img_path: /assets/img/2024-08-05-open-source-edr-with-wazuh
 image:
     path: thumbnail.JPEG
     alt: Spada Lake, Washington
@@ -54,8 +54,54 @@ Of course, none of this data will be present without any agents so now I'll work
 ### Opening Firewall Rules
 Wazuh requires TCP 1514 to enroll agents and TCP 1515 for the continued sending of data from the agent. Because the host Wazuh is running on resides within my security tools VLAN, endpoints outside of that VLAN cannot communicate to it by default. Because of this, I'll need to create a firewall rule for each VLAN where I'll have endpoints monitored by Wazuh that allows 1514-1515 TCP to the security tools VLAN.
 
+Heading over to OPNsense->Firewall->Rules, I'll create add this firewall rule to each applicable VLAN. The example shown below is only for my applications VLAN, but I'll also create on for my other VLANs where I'll be enrolling devices.
+![diagram1](9.png){: .normal }  
+
 ## Enrolling Agents
 
 ### Windows Endpoints
+To install the Wazuh agent on Windows endpoints I'll first download the agent MSI installer from Wazuh, launch an elevated PowerShell session, and cd into the directory containing the MSI.
+
+From there, I'll run the following commands to install the agent and start the Wazuh agent service:
+```bash
+.\wazuh-agent-4.8.1-1.msi /q WAZUH_MANAGER="WAZUH_IP"
+
+NET START Wazuh
+```
 
 ### Linux Endpoints
+Since all of the Linux endpoints within my environment are Debian-based, I'll be using the instructions provided by Wazuh [here](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-linux.html) for agent installation via apt.
+
+To start, I'll import Wazuh's GPG key:  
+```bash
+curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
+```
+
+Next, I'll add the Wazuh apt repository to my host's repository list:
+```bash
+echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
+```
+
+With the key imported and apt repository added, I'll simply **apt-get update** to ensure my host can pull packages from the Wazuh repository. To install the agent, I'll run the following where WAZUH_IP is the IP address of the host where Wazuh is running.  
+```bash
+WAZUH_MANAGER="WAZUH_IP" apt-get install wazuh-agent
+```
+
+Now that the Wazuh agent is installed and pointing at the correct server, I'll just start it up with the following:
+```bash
+systemctl daemon-reload
+systemctl enable wazuh-agent
+systemctl start wazuh-agent
+```
+
+### Endpoints Dashboard
+After enrolling a few Windows and Linux endpoints, I can now go to Wazuh->Server Management->Endpoint Summary to get an overview of my enrolled agents. Here I can see the agents enrolled, the numbers of enrolled agents vs offline agents, IP addresses and OS of the endpoints, etc.  
+![diagram1](10.png){: .normal }  
+
+## Closing Thoughts
+With the Wazuh components now operation and agents enrolled, Wazuh will start to receive data from the endpoints, process that data, and flag anything that may look suspicious. In fact, heading over to the Wazuh dashboard I can already see lots of medium and low severity events coming it:
+![diagram1](11.png){: .normal }  
+
+There is likely plenty of tuning to be done as ~400 findings from just 3 endpoints in a few hours is *very* noisy. Once the findings are at an acceptable volume, alerting and integrations into other tools such as a case management or threat intelligence platform to operationalize and enrich these findings. This is really just the tip of the iceberg when it comes to what Wazuh can achieve and I plan on doing many posts dedicated to the various functions of Wazuh. 
+
+Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
