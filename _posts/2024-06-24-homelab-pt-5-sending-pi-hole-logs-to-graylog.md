@@ -86,3 +86,4 @@ After creating and applying these extractors, I can now see the fields are succe
 From here, I can now perform various analysis and aggregation with the DNS data now being sent to Graylog. In addition to this, when building out my SOAR workflows I'll be able to cross-reference the DNS traffic when investigating anything DNS related. Outside of security relevance, this data will also prove helpful if I am ever needing to do any troubleshooting that may involve DNS.
 
 Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+![human_badge](badge.svg){: .normal }{: width="125" }

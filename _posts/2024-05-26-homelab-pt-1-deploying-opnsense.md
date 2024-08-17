@@ -122,3 +122,4 @@ Now with OPNsense, a switch, and an access point configured I now have a simple,
 ![](23.png){: .normal }  
 
 Thanks for taking the time to read this post - feel free to reach out via [LinkedIn](https://www.linkedin.com/in/judelanning/) if you have any questions for me!
+![human_badge](badge.svg){: .normal }{: width="125" }

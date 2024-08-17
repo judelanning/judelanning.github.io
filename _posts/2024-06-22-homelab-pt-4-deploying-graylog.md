@@ -191,3 +191,4 @@ Now that the logs are being properly parsed, they are good to go.
 Now with Graylog fully configured and receiving firewall logs, I can use it to conduct investigations into any traffic occurring on my network, gather statistics on network traffic, and anything else I would like to do with the data. The OPNsense logs will really just be used as an investigative/troubleshooting data source, but as I onboard more log sources to Graylog I can use them to kick off SOAR workflows which will enrich events, open cases in the case management platform, notify me of new events, etc.
 
 Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+![human_badge](badge.svg){: .normal }{: width="125" }

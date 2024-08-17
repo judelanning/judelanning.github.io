@@ -100,3 +100,4 @@ What I've covered here is a fraction of a scratch on the surface of DFIR IRIS's 
 With DFIR IRIS now deployed, I can start to build out SOAR workflows that will automatically gather events, enrich them, and then open cases within the platform with all the relevant information ready for analyst triage. In my next post I plan on deploying [n8n](https://github.com/n8n-io/n8n), an open-source automation platform, to serve as my SOAR and build out an end-to-end workflow for the Suricata IDS detections I set up in my [previous post](/posts/homelab-pt-7-detecting-known-threats-with-suricata/). 
 
 Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+![human_badge](badge.svg){: .normal }{: width="125" }

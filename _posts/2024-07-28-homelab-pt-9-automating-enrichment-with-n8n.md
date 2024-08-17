@@ -212,3 +212,4 @@ With the end-to-end workflow now complete, when the ET Open CNC findings are tri
 ![diagram1](33.png){: .normal }  
 
 Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+![human_badge](badge.svg){: .normal }{: width="125" }

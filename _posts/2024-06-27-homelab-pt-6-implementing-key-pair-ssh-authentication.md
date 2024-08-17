@@ -76,3 +76,4 @@ If I were using a non-Ubuntu based system that doesn't have this functionality, 
 Although these changes were relatively simple, my security posture is now greatly improved against internal attackers that may be looking to move laterally via SSH within my network.
 
 Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+![human_badge](badge.svg){: .normal }{: width="125" }
