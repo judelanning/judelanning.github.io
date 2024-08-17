@@ -109,5 +109,5 @@ With VLANs now configured, I can isolate devices I may not inherently trust on m
 
 In my next post, I plan on deploying PiHole & Unbound as an ad-blocking, recursive DNS server to enhance the privacy and security of users on my network.
 
-Thanks for taking the time to read this post - feel free to reach out via [LinkedIn](https://www.linkedin.com/in/judelanning/) if you have any questions for me!
+Thanks for taking the time to read this post - feel free to reach out via [LinkedIn](https://www.linkedin.com/in/judelanning/) if you have any questions for me!  
 ![human_badge](badge.svg){: .normal }{: width="125" }

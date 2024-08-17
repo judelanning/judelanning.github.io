@@ -104,5 +104,5 @@ With the Wazuh components now operation and agents enrolled, Wazuh will start to
 
 There is likely plenty of tuning to be done as ~400 findings from just 3 endpoints in a few hours is *very* noisy. Once the findings are at an acceptable volume, alerting and integrations into other tools such as a case management or threat intelligence platform to operationalize and enrich these findings. This is really just the tip of the iceberg when it comes to what Wazuh can achieve and I plan on doing many posts dedicated to the various functions of Wazuh. 
 
-Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!  
 ![human_badge](badge.svg){: .normal }{: width="125" }

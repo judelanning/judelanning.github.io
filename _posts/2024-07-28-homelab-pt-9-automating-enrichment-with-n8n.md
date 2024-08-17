@@ -211,5 +211,5 @@ There may be more interesting fields available that I could add to the notes tha
 With the end-to-end workflow now complete, when the ET Open CNC findings are triggered from Suricata running on my firewall the findings will automatically open a case within IRIS, fetch threat intelligence from various sources, and add that intelligence to the respective case. This allows the analyst triaging the finding to have all the information available within the case itself without having to go out to a separate resource.  
 ![diagram1](33.png){: .normal }  
 
-Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!  
 ![human_badge](badge.svg){: .normal }{: width="125" }

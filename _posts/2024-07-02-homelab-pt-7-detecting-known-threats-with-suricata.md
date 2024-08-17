@@ -150,5 +150,5 @@ timestamp
 ## Closing Thoughts
 With Suricata now monitoring my network traffic for matches to the imported rules, alerting on them, and sending logs to my SIEM I can now build out the automation to enrich the findings, open incidents, notify me, and much more with a SOAR platform. In my next post I plan on deploying [DFIR IRIS](https://github.com/dfir-iris/iris-web) as my incident management platform which will allow me to properly triage and document the resolution of incidents.  
 
-Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!
+Thanks for taking the time to read this post and feel free to reach out via LinkedIn if you have any questions!  
 ![human_badge](badge.svg){: .normal }{: width="125" }
